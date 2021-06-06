@@ -1,0 +1,44 @@
+// https://dbdiagram.io/d
+
+Table users as U {
+  id int [pk, increment]
+  username varchar
+  created_at timestamp
+}
+
+Table merchants {
+  id int [pk, increment]
+  name varchar
+  sunday_opens_at timestamp
+  sunday_closes_at timestamp
+  monday_opens_at timestamp
+  monday_closes_at timestamp
+  tuesday_opens_at timestamp
+  tuesday_closes_at timestamp
+  wednesday_opens_at timestamp
+  wednesday_closes_at timestamp
+  thursday_opens_at timestamp
+  thursday_closes_at timestamp
+  friday_opens_at timestamp
+  friday_closes_at timestamp
+  saturday_opens_at timestamp
+  saturday_closes_at timestamp
+}
+
+Table collections {
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  name varchar
+}
+
+Table collection_merchants {
+  id int [pk, increment]
+  collection_id int [ref: > collections.id]
+  merchant_id int [ref: > merchants.id]
+}
+
+Table collection_collaborators {
+  id int [pk, increment]
+  collection_id int [ref: > collections.id]
+  user_id int [ref: > users.id]
+}
