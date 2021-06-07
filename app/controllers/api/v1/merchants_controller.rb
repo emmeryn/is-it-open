@@ -2,11 +2,13 @@ module Api
   module V1
     class MerchantsController < ApplicationController
       def index
-        if user_signed_in?
-          render json: Merchant.all
-        else
-          render json: {}, status: 401
-        end
+        render json: {}, status: 401 unless user_signed_in?
+
+        pagy, records = pagy(Merchant.all)
+        render json: {
+          pagy: pagy_metadata(pagy),
+          merchants: records
+        }
       end
     end
   end
