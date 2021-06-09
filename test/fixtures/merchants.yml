@@ -1,7 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
+  name: Merchant Name 1
   sunday_opens_at:
   sunday_closes_at:
   monday_opens_at:
@@ -18,7 +18,7 @@ one:
   saturday_closes_at:
 
 two:
-  name: MyString
+  name: Merchant Name 2
   sunday_opens_at:
   sunday_closes_at:
   monday_opens_at:

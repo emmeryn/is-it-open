@@ -5,12 +5,15 @@ module Api
     class MerchantsControllerTest < ActionDispatch::IntegrationTest
       include Devise::Test::IntegrationHelpers
 
-      test 'should return list of merchants for authenticated user' do
+      test 'should return list of merchants and pagination metadata for authenticated user' do
         get new_user_session_path
         sign_in users(:user_one)
         post user_session_url
         get api_v1_merchants_url
         assert_response :success
+        json_response = JSON.parse(response.body)
+        assert_equal 2, json_response['data'].count
+        assert_not_empty json_response['pagy']
       end
 
       test 'should return unauthorized for unauthenticated user' do

@@ -12,4 +12,6 @@ class Merchant < ApplicationRecord
   opening_hours_attributes.each do |attribute|
     attribute attribute, :time_only
   end
+
+  scope :with_name_search, ->(name) { where('name LIKE ?', "%#{name}%") }
 end

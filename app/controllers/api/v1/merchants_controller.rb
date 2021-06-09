@@ -4,7 +4,13 @@ module Api
       def index
         render json: {}, status: 401 unless user_signed_in?
 
-        pagy, records = pagy(Merchant.all)
+        merchant_query = Merchant.all
+
+        if params[:name].present?
+          merchant_query = merchant_query.with_name_search(params[:name])
+        end
+
+        pagy, records = pagy(merchant_query)
         render json: {
           pagy: pagy_metadata(pagy),
           merchants: records
