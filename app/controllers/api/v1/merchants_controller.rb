@@ -10,6 +10,10 @@ module Api
           merchant_query = merchant_query.with_name_search(params[:name])
         end
 
+        if params[:date_open].present? && params[:time_open].present?
+          merchant_query = merchant_query.with_date_time(params[:date_open], params[:time_open])
+        end
+
         pagy, records = pagy(merchant_query)
         render json: {
           pagy: pagy_metadata(pagy),

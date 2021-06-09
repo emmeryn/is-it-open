@@ -2,12 +2,12 @@
 
 one:
   name: Merchant Name 1
-  sunday_opens_at:
-  sunday_closes_at:
-  monday_opens_at:
-  monday_closes_at:
-  tuesday_opens_at:
-  tuesday_closes_at:
+  sunday_opens_at: '08:00:00'
+  sunday_closes_at: '18:00:00'
+  monday_opens_at: '09:00:00'
+  monday_closes_at: '02:00:00'
+  tuesday_opens_at: '10:00:00'
+  tuesday_closes_at: '03:00:00'
   wednesday_opens_at:
   wednesday_closes_at:
   thursday_opens_at:
