@@ -2,7 +2,10 @@ module Api
   module V1
     class MerchantsController < ApplicationController
       def index
-        render json: {}, status: 401 unless user_signed_in?
+        unless user_signed_in?
+          render json: {}, status: 401
+          return
+        end
 
         merchant_query = Merchant.all
 
