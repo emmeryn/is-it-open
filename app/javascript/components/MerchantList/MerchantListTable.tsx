@@ -7,7 +7,12 @@ export interface MerchantListTableProps {
   merchantsData: GetMerchantsResponse,
   fetchData: (queryParams: Record<string, unknown>) => void,
   loading: boolean,
-  pageCount: number
+  pageCount: number,
+  filterQuery: {
+    name?: string,
+    date_open?: string,
+    time_open?: string
+  }
 }
 
 export interface Merchant {
@@ -29,7 +34,7 @@ export interface Merchant {
   saturday_closes_at: string,
 }
 
-const MerchantListTable: React.FC<MerchantListTableProps> = ({merchantsData, fetchData, loading, pageCount: controlledPageCount}) => {
+const MerchantListTable: React.FC<MerchantListTableProps> = ({merchantsData, fetchData, loading, pageCount: controlledPageCount, filterQuery}) => {
   const {pagy, merchants} = merchantsData;
   const columns = React.useMemo(
     () => [
@@ -71,9 +76,15 @@ const MerchantListTable: React.FC<MerchantListTableProps> = ({merchantsData, fet
 
   const toTimeString = (opens_at, closes_at) => {
     if (opens_at === null || closes_at === null) {
-      return null;
+      return 'Closed';
     }
-    return `${opens_at.hour}:${opens_at.minute} - ${closes_at.hour}:${closes_at.minute}`
+    return `${opens_at.hour}:${opens_at.minute.toLocaleString('en-US', {
+      minimumIntegerDigits: 2,
+      useGrouping: false
+    })} - ${closes_at.hour}:${closes_at.minute.toLocaleString('en-US', {
+      minimumIntegerDigits: 2,
+      useGrouping: false
+    })}`
   };
 
   const data = merchants.map(merchant => {
@@ -116,8 +127,8 @@ const MerchantListTable: React.FC<MerchantListTableProps> = ({merchantsData, fet
   );
 
   useEffect(() => {
-    fetchData({page: pageIndex + 1})
-  }, [fetchData, pageIndex, pageSize])
+    fetchData({page: pageIndex + 1, ...filterQuery})
+  }, [fetchData, pageIndex, pageSize, filterQuery])
 
   return (
     <>
@@ -215,7 +226,12 @@ MerchantListTable.propTypes = {
   }),
   fetchData: PropTypes.func,
   loading: PropTypes.bool,
-  pageCount: PropTypes.number
+  pageCount: PropTypes.number,
+  filterQuery: PropTypes.shape({
+    name: PropTypes.string,
+    date_open: PropTypes.string,
+    time_open: PropTypes.string
+  })
 }
 
 export default MerchantListTable;
