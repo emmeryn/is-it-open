@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
-import MerchantList from "./MerchantList";
+import MerchantList from "./MerchantList/MerchantList";
 
 const App: React.FC<{name: string}> = (props) => (
   <div>
