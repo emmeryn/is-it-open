@@ -4,7 +4,7 @@ import getMerchants from "../../api/getMerchants";
 
 const MerchantList: React.FC = () => {
   const [getMerchantsData, setMerchantsData] = useState({
-    pagy: {},
+    pagy: {count: 0, pages: 0},
     merchants: []
   });
   const [loading, setLoading] = useState(false);

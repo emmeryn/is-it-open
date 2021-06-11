@@ -209,8 +209,6 @@ MerchantListTable.propTypes = {
   merchantsData: PropTypes.shape({
     pagy: PropTypes.shape({
       count: PropTypes.number,
-      from: PropTypes.number,
-      items: PropTypes.number,
       pages: PropTypes.number
     }),
     merchants: PropTypes.array

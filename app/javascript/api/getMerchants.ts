@@ -2,7 +2,10 @@ import {httpGet} from "../utils/httpClient";
 import {Merchant} from "../components/MerchantList/MerchantListTable";
 
 export interface GetMerchantsResponse {
-  pagy: Record<string, unknown>,
+  pagy: {
+    count: number,
+    pages: number,
+  },
   merchants: Merchant[]
 }
 
