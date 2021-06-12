@@ -1,12 +1,9 @@
 module Api
   module V1
     class MerchantsController < ApplicationController
-      def index
-        unless user_signed_in?
-          render json: {}, status: 401
-          return
-        end
+      before_action :authenticate_user!
 
+      def index
         merchant_query = Merchant.all
 
         if params[:name].present?

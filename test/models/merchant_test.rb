@@ -28,6 +28,12 @@ class MerchantTest < ActiveSupport::TestCase
     )
     assert_includes query, merchants(:one)
     refute_includes query, merchants(:two)
+
+    query = Merchant.with_date_time(
+      monday_date,
+      Tod::TimeOfDay.new(1).to_s
+    )
+    refute_includes query, merchants(:one)
   end
 
   test '#with_date_time returns merchants with closing time after midnight yesterday' do
