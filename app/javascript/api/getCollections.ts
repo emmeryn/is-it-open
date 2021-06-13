@@ -5,16 +5,8 @@ export interface Collection {
   name: string
 }
 
-export interface GetCollectionsResponse {
-  pagy: {
-    count: number,
-    pages: number,
-  },
-  collections: Collection[]
-}
-
-const getCollections = async (queryParams?: { page?: number }): Promise<GetCollectionsResponse> => {
-  return await httpGet(`/api/v1/collections?`, queryParams);
+const getCollections = async (): Promise<Collection[]> => {
+  return await httpGet(`/api/v1/collections`);
 };
 
 export default getCollections;

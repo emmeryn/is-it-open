@@ -4,16 +4,13 @@ import createCollection from "../../api/createCollection";
 import {Button, FormControl, InputGroup, ListGroup} from "react-bootstrap";
 
 const CollectionList: React.FC = () => {
-  const [getCollectionsData, setCollectionsData] = useState({
-    pagy: {count: 0, pages: 0},
-    collections: []
-  });
+  const [getCollectionsData, setCollectionsData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState('');
-  const fetchData = React.useCallback((queryParams?: { page? }) => {
+  const fetchData = React.useCallback(() => {
     setLoading(true);
 
-    getCollections(queryParams).then(response => {
+    getCollections().then(response => {
       setCollectionsData(response);
       setLoading(false);
     })
@@ -42,7 +39,7 @@ const CollectionList: React.FC = () => {
       <ListGroup defaultActiveKey="#link1">
       {loading ?
         "Loading..." :
-        getCollectionsData.collections.map(collection => (
+        getCollectionsData.map(collection => (
           <ListGroup.Item action href={`/collections/${collection.id}`} key={collection.id}>
             {collection.name}
           </ListGroup.Item>

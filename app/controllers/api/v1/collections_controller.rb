@@ -5,12 +5,7 @@ module Api
       before_action :set_collection, only: [:show, :update, :destroy]
 
       def index
-        collection_query = Collection.where(user: current_user)
-        pagy, records = pagy(collection_query)
-        render json: {
-          pagy: pagy_metadata(pagy),
-          collections: records
-        }
+        render json: Collection.where(user: current_user)
       end
 
       def create
