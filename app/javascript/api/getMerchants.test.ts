@@ -5,7 +5,7 @@ jest.mock('../utils/httpClient');
 
 describe('getMerchants', () => {
   const getMerchantsResponse: GetMerchantsResponse = {
-    pagy: {},
+    pagy: {count: 1, pages: 1},
     merchants: [{
       id: 1,
       name: 'Test Name',
@@ -32,9 +32,9 @@ describe('getMerchants', () => {
 
   it('calls the correct API endpoint', async () => {
     await getMerchants({page: 1, name: 'Test'});
-    expect(httpGet).toHaveBeenCalledWith('/api/v1/merchants?page=1&name=Test');
+    expect(httpGet).toHaveBeenCalledWith('/api/v1/merchants?', {page: 1, name: 'Test'});
 
     await getMerchants({page: 2, name: 'Name'});
-    expect(httpGet).toHaveBeenCalledWith('/api/v1/merchants?page=2&name=Name');
+    expect(httpGet).toHaveBeenCalledWith('/api/v1/merchants?', {page: 2, name: 'Name'});
   });
 });

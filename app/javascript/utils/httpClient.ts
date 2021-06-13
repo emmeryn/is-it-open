@@ -1,5 +1,11 @@
-export const httpGet = <ResponseType>(path: string): Promise<ResponseType> =>
-  httpFetch(path, 'GET');
+export const httpGet = <ResponseType>(path: string, object?: Record<string, any>): Promise<ResponseType> =>
+{
+  const queryString = new URLSearchParams()
+  for (const key in object) {
+    queryString.append(key, object[key]);
+  }
+  return httpFetch(`${path}${queryString.toString()}`, 'GET');
+};
 
 export const httpPost = <ResponseType = void>(path: string, object: unknown): Promise<ResponseType> =>
   httpFetch(path, 'POST', object);
