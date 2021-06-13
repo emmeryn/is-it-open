@@ -14,7 +14,9 @@ module Api
       end
 
       def create
-        @collection = Collection.new(collection_params)
+        @collection = Collection.new(
+          {user: current_user}.merge!(collection_params)
+        )
 
         if @collection.save
           render json: @collection, status: :created

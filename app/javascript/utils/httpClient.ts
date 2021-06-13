@@ -24,9 +24,15 @@ const httpFetch = <ResponseType = void>(path: string, method: string, object?: u
       }
     });
 
-const requestInit = (method: string): RequestInit => ({
-  method,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+const requestInit = (method: string): RequestInit => {
+  const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+  return ({
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+      'X-CSRF-Token': token
+    },
+  });
+};

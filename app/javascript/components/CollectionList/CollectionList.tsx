@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 
 import getCollections from "../../api/getCollections";
+import createCollection from "../../api/createCollection";
 
 const CollectionList: React.FC = () => {
   const [getCollectionsData, setCollectionsData] = useState({
@@ -9,6 +10,7 @@ const CollectionList: React.FC = () => {
     collections: []
   });
   const [loading, setLoading] = useState(false);
+  const [newCollectionName, setNewCollectionName] = useState('');
   const fetchData = React.useCallback((queryParams?: { page? }) => {
     setLoading(true);
 
@@ -24,6 +26,18 @@ const CollectionList: React.FC = () => {
 
   return (
     <div>
+      <input type="text" value={newCollectionName} onChange={(e) => {
+        setNewCollectionName(e.target.value);
+      }} />
+      <button onClick={() => {
+        setLoading(true);
+        createCollection({name: newCollectionName}).then(response => {
+          fetchData();
+          setLoading(false);
+          setNewCollectionName('');
+        });
+      }}>Create new collection</button>
+
       {loading ?
         "Loading..." :
         getCollectionsData.collections.map(collection => (
