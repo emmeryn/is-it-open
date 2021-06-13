@@ -1,8 +1,9 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
-import { useTable, usePagination } from 'react-table'
-import {GetMerchantsResponse} from "../../api/getMerchants";
+import {useTable, usePagination} from 'react-table'
 import {Button, Nav, Table} from "react-bootstrap";
+import {GetMerchantsResponse} from "../../api/getMerchants";
+import AddToCollectionModal from "./AddToCollectionModal";
 
 export interface MerchantListTableProps {
   merchantsData: GetMerchantsResponse,
@@ -16,7 +17,27 @@ export interface MerchantListTableProps {
   }
 }
 
-const MerchantListTable: React.FC<MerchantListTableProps> = ({merchantsData, fetchData, loading, pageCount: controlledPageCount, filterQuery}) => {
+const toTimeString = (opens_at, closes_at) => {
+  if (opens_at === null || closes_at === null) {
+    return 'Closed';
+  }
+  return `${opens_at.hour}:${opens_at.minute.toLocaleString('en-US', {
+    minimumIntegerDigits: 2,
+    useGrouping: false
+  })} - ${closes_at.hour}:${closes_at.minute.toLocaleString('en-US', {
+    minimumIntegerDigits: 2,
+    useGrouping: false
+  })}`
+};
+
+const MerchantListTable: React.FC<MerchantListTableProps> = (
+  {
+    merchantsData,
+    fetchData,
+    loading,
+    pageCount: controlledPageCount,
+    filterQuery
+  }) => {
   const {pagy, merchants} = merchantsData;
   const columns = React.useMemo(
     () => [
@@ -55,19 +76,10 @@ const MerchantListTable: React.FC<MerchantListTableProps> = ({merchantsData, fet
     ],
     []
   );
-
-  const toTimeString = (opens_at, closes_at) => {
-    if (opens_at === null || closes_at === null) {
-      return 'Closed';
-    }
-    return `${opens_at.hour}:${opens_at.minute.toLocaleString('en-US', {
-      minimumIntegerDigits: 2,
-      useGrouping: false
-    })} - ${closes_at.hour}:${closes_at.minute.toLocaleString('en-US', {
-      minimumIntegerDigits: 2,
-      useGrouping: false
-    })}`
-  };
+  const [addToCollectionModalProps, setAddToCollectionModalProps] = useState({
+    isOpen: false,
+    merchantId: null
+  });
 
   const data = merchants.map(merchant => {
     return {
@@ -106,7 +118,24 @@ const MerchantListTable: React.FC<MerchantListTableProps> = ({merchantsData, fet
       manualPagination: true,
       pageCount: controlledPageCount
     },
-    usePagination
+    usePagination,
+    hooks => {
+      hooks.visibleColumns.push(columns => [
+        ...columns,
+        {
+          id: 'addToCollection',
+          Header: (header) => (<></>),
+          Cell: ({row}) =>
+            (
+              <Button onClick={() => {
+                setAddToCollectionModalProps({isOpen: true, merchantId: row.original.id})
+              }} variant="outline-primary" size="sm">
+                ⭐
+              </Button>
+            ),
+        },
+      ])
+    }
   );
 
   useEffect(() => {
@@ -166,16 +195,20 @@ const MerchantListTable: React.FC<MerchantListTableProps> = ({merchantsData, fet
       <Nav>
         <ul className="pagination">
           <li className="page-item">
-            <Button variant="link" className="page-link" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>{'<<'}</Button>
+            <Button variant="link" className="page-link" onClick={() => gotoPage(0)}
+                    disabled={!canPreviousPage}>{'<<'}</Button>
           </li>
           <li className="page-item">
-            <Button variant="link" className="page-link" onClick={() => previousPage()} disabled={!canPreviousPage}>{'<'}</Button>
+            <Button variant="link" className="page-link" onClick={() => previousPage()}
+                    disabled={!canPreviousPage}>{'<'}</Button>
           </li>
           <li className="page-item">
-            <Button variant="link" className="page-link" onClick={() => nextPage()} disabled={!canNextPage}>{'>'}</Button>
+            <Button variant="link" className="page-link" onClick={() => nextPage()}
+                    disabled={!canNextPage}>{'>'}</Button>
           </li>
           <li className="page-item">
-            <Button variant="link" className="page-link" onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>{'>>'}</Button>
+            <Button variant="link" className="page-link" onClick={() => gotoPage(pageCount - 1)}
+                    disabled={!canNextPage}>{'>>'}</Button>
           </li>
         </ul>
         <span>
@@ -187,13 +220,18 @@ const MerchantListTable: React.FC<MerchantListTableProps> = ({merchantsData, fet
               const page = e.target.value ? Number(e.target.value) - 1 : 0
               gotoPage(page)
             }}
-            style={{ width: '100px' }}
+            style={{width: '100px'}}
           />
         </span>
       </Nav>
+      <AddToCollectionModal
+        hideModal={() => {
+          setAddToCollectionModalProps({isOpen: false, merchantId: null})
+        }}
+        {...addToCollectionModalProps} />
     </>
   );
-}
+};
 
 MerchantListTable.propTypes = {
   merchantsData: PropTypes.shape({

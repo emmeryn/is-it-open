@@ -32,7 +32,9 @@ module Api
       end
 
       def update
-        @collection.update(collection_params)
+        params = collection_params
+        params[:merchant_ids] = @collection.merchant_ids.union params[:merchant_ids]
+        @collection.update(params)
         render json: @collection, status: :ok
       end
 
@@ -53,7 +55,7 @@ module Api
       end
 
       def collection_params
-        params.require(:collection).permit(:name)
+        params.require(:collection).permit(:name, merchant_ids: [])
       end
     end
   end
