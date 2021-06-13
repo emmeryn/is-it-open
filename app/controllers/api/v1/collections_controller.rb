@@ -28,8 +28,9 @@ module Api
 
         pagy, records = pagy(collection_query)
         render json: {
+          name: @collection.name,
           pagy: pagy_metadata(pagy),
-          collections: records
+          merchants: records
         }
       end
 
@@ -47,6 +48,11 @@ module Api
 
       def set_collection
         @collection = Collection.find(params[:id])
+
+        unless @collection.user == current_user
+          render json: {}, status: 401
+          nil
+        end
       end
 
       def collection_params
