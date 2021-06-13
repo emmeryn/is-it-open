@@ -6,7 +6,10 @@ Rails.application.routes.draw do
     end
   end
 
-  root to: 'home#index'
-  get 'home', to: 'home#index'
   devise_for :users
+
+  get '*page', to: 'home#index', constraints: ->(req) do
+    !req.xhr? && req.format.html?
+  end
+  root to: 'home#index'
 end
