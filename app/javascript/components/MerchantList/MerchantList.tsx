@@ -23,20 +23,20 @@ const MerchantList: React.FC = () => {
 
   return (
     <div>
-      <h2>
-        Search for restaurants:
-        <input type="text" onBlur={(e) => {
+      <h1>Restaurants</h1>
+      <h3>
+        <input type="text" placeholder="Search restaurants..." onBlur={(e) => {
           setFilterQuery({...filterQuery, name: e.target.value})
         }} />
-        open on date:
+        open on
         <input type="date" onBlur={(e) => {
           setFilterQuery({...filterQuery, date_open: e.target.value})
         }} />
-        at time:
+        at
         <input type="time" onBlur={(e) => {
           setFilterQuery({...filterQuery, time_open: e.target.value})
         }} />
-      </h2>
+      </h3>
       <MerchantListTable
         merchantsData={getMerchantsData}
         fetchData={fetchData}

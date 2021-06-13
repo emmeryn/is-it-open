@@ -4,12 +4,11 @@ import {BrowserRouter, Switch, Route} from 'react-router-dom'
 import MerchantList from "./MerchantList/MerchantList";
 import CollectionList from "./CollectionList/CollectionList";
 import Collection from "./CollectionList/Collection";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {Container} from "react-bootstrap";
 
 const App: React.FC<{name: string}> = (props) => (
-  <div>
-    <h1>
-      Welcome, {props.name}!
-    </h1>
+  <Container>
     <BrowserRouter>
       <Switch>
         <Route exact path='/' render={() => <MerchantList/>}/>
@@ -17,7 +16,7 @@ const App: React.FC<{name: string}> = (props) => (
         <Route path='/collections/:id' render={() => <Collection/>}/>
       </Switch>
     </BrowserRouter>
-  </div>
+  </Container>
 )
 
 App.propTypes = {

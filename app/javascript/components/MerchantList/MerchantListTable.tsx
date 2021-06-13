@@ -2,6 +2,7 @@ import React, {useEffect} from "react";
 import PropTypes from "prop-types";
 import { useTable, usePagination } from 'react-table'
 import {GetMerchantsResponse} from "../../api/getMerchants";
+import {Button, Nav, Table} from "react-bootstrap";
 
 export interface MerchantListTableProps {
   merchantsData: GetMerchantsResponse,
@@ -70,6 +71,7 @@ const MerchantListTable: React.FC<MerchantListTableProps> = ({merchantsData, fet
 
   const data = merchants.map(merchant => {
     return {
+      id: merchant.id,
       name: merchant.name,
       sunday: toTimeString(merchant.sunday_opens_at, merchant.sunday_closes_at),
       monday: toTimeString(merchant.monday_opens_at, merchant.monday_closes_at),
@@ -113,75 +115,71 @@ const MerchantListTable: React.FC<MerchantListTableProps> = ({merchantsData, fet
 
   return (
     <>
-    <table {...getTableProps()}>
-      <thead>
-      {headerGroups.map((headerGroup, i) => (
-        <tr key={i} {...headerGroup.getHeaderGroupProps()}>
-          {headerGroup.headers.map(column => (
-            <th key={column.id}
-              {...column.getHeaderProps()}
-            >
-              {column.render('Header')}
-              <span>
+      <Table striped bordered size="sm" {...getTableProps()}>
+        <thead>
+        {headerGroups.map((headerGroup, i) => (
+          <tr key={i} {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map(column => (
+              <th key={column.id}
+                  {...column.getHeaderProps()}
+              >
+                {column.render('Header')}
+                <span>
                     {column.isSorted
                       ? column.isSortedDesc
                         ? ' 🔽'
                         : ' 🔼'
                       : ''}
               </span>
-            </th>
-          ))}
-        </tr>
-      ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-      {page.map((row, i) => {
-        prepareRow(row)
-        return (
-          <tr key={i} {...row.getRowProps()}>
-            {row.cells.map(cell => (
-              <td key={`${cell.column.id}_${cell.row.id}`}
-                  {...cell.getCellProps()}
-              >
-                {cell.render('Cell')}
-              </td>
+              </th>
             ))}
           </tr>
-        )
-      })}
-      <tr>
-        {loading ? (
-          <td colSpan={10}>Loading...</td>
-        ) : (
-          <td colSpan={10}>
-            Showing {page.length} of {pagy.count}{' '}
-            results
-          </td>
-        )}
-      </tr>
-      </tbody>
-    </table>
-      <div className="pagination">
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-          {'<<'}
-        </button>{' '}
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-          {'<'}
-        </button>{' '}
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
-          {'>'}
-        </button>{' '}
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-          {'>>'}
-        </button>{' '}
+        ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+        {page.map((row, i) => {
+          prepareRow(row)
+          return (
+            <tr key={i} {...row.getRowProps()}>
+              {row.cells.map(cell => (
+                <td key={`${cell.column.id}_${cell.row.id}`}
+                    {...cell.getCellProps()}
+                >
+                  {cell.render('Cell')}
+                </td>
+              ))}
+            </tr>
+          )
+        })}
+        <tr>
+          {loading ? (
+            <td colSpan={10}>Loading...</td>
+          ) : (
+            <td colSpan={10}>
+              Showing {page.length} of {pagy.count}{' '}
+              results
+            </td>
+          )}
+        </tr>
+        </tbody>
+      </Table>
+      <Nav>
+        <ul className="pagination">
+          <li className="page-item">
+            <Button variant="link" className="page-link" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>{'<<'}</Button>
+          </li>
+          <li className="page-item">
+            <Button variant="link" className="page-link" onClick={() => previousPage()} disabled={!canPreviousPage}>{'<'}</Button>
+          </li>
+          <li className="page-item">
+            <Button variant="link" className="page-link" onClick={() => nextPage()} disabled={!canNextPage}>{'>'}</Button>
+          </li>
+          <li className="page-item">
+            <Button variant="link" className="page-link" onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>{'>>'}</Button>
+          </li>
+        </ul>
         <span>
-          Page{' '}
-          <strong>
-            {pageIndex + 1} of {pageOptions.length}
-          </strong>{' '}
-        </span>
-        <span>
-          | Go to page:{' '}
+          Page{' '}<strong>{pageIndex + 1} of {pageOptions.length}</strong> | Go to page:{' '}
           <input
             type="number"
             defaultValue={pageIndex + 1}
@@ -191,8 +189,8 @@ const MerchantListTable: React.FC<MerchantListTableProps> = ({merchantsData, fet
             }}
             style={{ width: '100px' }}
           />
-        </span>{' '}
-      </div>
+        </span>
+      </Nav>
     </>
   );
 }

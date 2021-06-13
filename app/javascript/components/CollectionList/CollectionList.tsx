@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
-
 import getCollections from "../../api/getCollections";
 import createCollection from "../../api/createCollection";
+import {Button, FormControl, InputGroup, ListGroup} from "react-bootstrap";
 
 const CollectionList: React.FC = () => {
   const [getCollectionsData, setCollectionsData] = useState({
@@ -26,26 +25,30 @@ const CollectionList: React.FC = () => {
 
   return (
     <div>
-      <input type="text" value={newCollectionName} onChange={(e) => {
-        setNewCollectionName(e.target.value);
-      }} />
-      <button onClick={() => {
-        setLoading(true);
-        createCollection({name: newCollectionName}).then(response => {
-          fetchData();
-          setLoading(false);
-          setNewCollectionName('');
-        });
-      }}>Create new collection</button>
-
+      <h1>Collections</h1>
+      <InputGroup>
+        <FormControl value={newCollectionName} onChange={(e) => {
+          setNewCollectionName(e.target.value);
+        }}/>
+        <Button onClick={() => {
+          setLoading(true);
+          createCollection({name: newCollectionName}).then(response => {
+            fetchData();
+            setLoading(false);
+            setNewCollectionName('');
+          });
+        }}>Create new collection</Button>
+      </InputGroup>
+      <ListGroup defaultActiveKey="#link1">
       {loading ?
         "Loading..." :
         getCollectionsData.collections.map(collection => (
-          <div key={collection.id}>
-            <Link to={`/collections/${collection.id}`}>{collection.name}</Link>
-          </div>
+          <ListGroup.Item action href={`/collections/${collection.id}`} key={collection.id}>
+            {collection.name}
+          </ListGroup.Item>
         ))
       }
+      </ListGroup>
     </div>
   )
 };
