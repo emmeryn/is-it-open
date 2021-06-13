@@ -24,16 +24,21 @@ const CollectionList: React.FC = () => {
     <div>
       <h1>Collections</h1>
       <InputGroup>
-        <FormControl value={newCollectionName} onChange={(e) => {
-          setNewCollectionName(e.target.value);
-        }}/>
-        <Button onClick={() => {
+        <FormControl
+          value={newCollectionName}
+          onChange={(e) => {
+            setNewCollectionName(e.target.value);
+          }}
+          placeholder="Collection name..."
+        />
+        <Button disabled={newCollectionName === ''} onClick={() => {
           setLoading(true);
-          createCollection({name: newCollectionName}).then(response => {
-            fetchData();
-            setLoading(false);
-            setNewCollectionName('');
-          });
+          createCollection({name: newCollectionName})
+            .then(response => {
+              fetchData();
+              setLoading(false);
+              setNewCollectionName('');
+            });
         }}>Create new collection</Button>
       </InputGroup>
       <ListGroup defaultActiveKey="#link1">
