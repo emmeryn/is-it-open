@@ -1,24 +1,19 @@
-# README
+# Is it open?
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Given some raw data for restaurants and their opening hours, this is a simple user-facing web app that allows the user to search for restaurants by some criteria.
 
-Things you may want to cover:
+## Features
 
-* Ruby version
+* User accounts and authentication
 
-* System dependencies
+* Filter for open restaurants by date, time, and name.
 
-* Configuration
+* Save and categorise favourite restaurants
 
-* Database creation
+## Technical Details
 
-* Database initialization
+* Built with Ruby on Rails and React (with TypeScript)
 
-* How to run the test suite
+* Contains a rake task to import the raw CSV data into the database
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* Database powered by PostgreSQL
